@@ -19,9 +19,12 @@ const config = webpackConfig(baseConfig, {
   plugins: [
     //   new uglify()
     new HTMLPlugin({
-      filename: 'index.html', // 生成文件的文件名
       template: path.join(__dirname, '../client/template.html') // 指定生成的文件模板，此处是html 还可以有jade，ejs等等，不过自定义模板需要安装对应的loader
       //  inject: 'head'       //生成的js加入到index的head之中
+    }),
+    new HTMLPlugin({
+      template: '!!ejs-compiled-loader!' + path.join(__dirname, '../client/server.template.ejs'),
+      filename: 'server.ejs'
     })
   ],
   performance: {

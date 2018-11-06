@@ -23,7 +23,7 @@ class textApi extends React.Component {
 
   getLogin() {
     axios.post('/api/user/login', {
-      accessToken: 'b68ffa00-0ba8-4b1c-ade9-c1c2d2e64815',
+      accessToken: 'd3746edc-1cf8-429d-a639-2c762aa756bb',
     })
       .then((resp) => {
         console.log(resp)

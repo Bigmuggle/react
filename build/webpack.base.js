@@ -18,6 +18,10 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
+        test: /.ejs$/,
+        loader: 'ejs-compilation-loader'
+      },
+      {
         test: /.js$/,
         loader: 'babel-loader',
         exclude: [

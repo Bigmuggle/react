@@ -6,10 +6,15 @@ import
 }
   from 'mobx'
 
-export class AppState {
-  @observable count = 0
+export default class AppState {
+  constructor({ count, name }={ count: 0, name: 'jack' }) {
+    this.count = count
+    this.name = name
+  }
 
-  @observable name = 'jack'
+  @observable count
+
+  @observable name
 
   @computed get msg() {
     return this.name +this.count
@@ -22,10 +27,11 @@ export class AppState {
   @action changeName(name) {
     this.name = name
   }
-}
 
-const appState = new AppState()
-setInterval(() => {
-  appState.add()
-}, 1000)
-export default appState
+  toJson() {
+    return {
+      count: this.count,
+      name: this.name,
+    }
+  }
+}
