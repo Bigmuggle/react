@@ -8,6 +8,7 @@ const serialize = require('serialize-javascript')
 const asyncBootstrap = require('react-async-bootstrapper')
 const ReactDomServer = require('react-dom/server')
 const serverConfig = require('../../build/webpack.config.server')
+const Helmet = require('react-helmet').default
 
 const getTemplate = () => {
   return new Promise((resolve, reject) => {
@@ -18,7 +19,20 @@ const getTemplate = () => {
       .catch(reject)
   })
 }
-const Module = module.constructor
+
+const NativeModule = require('module')
+const vm = require('vm')
+const getModuleFromString = (bundle, filename) => {
+  const m = { exports: {} }
+  const wrapper = NativeModule.wrap(bundle)
+  const script = new vm.Script(wrapper, {
+    filename: filename,
+    displayErrors: true
+  })
+  const result = script.runInThisContext()
+  result.call(m.exports, m.exports, require, m)
+  return m
+}
 const mfs = new MemoryFs()
 const serverCompiler = webpack(serverConfig)
 
@@ -38,8 +52,8 @@ serverCompiler.watch({}, (err, stats) => {
     serverConfig.output.filename
   )
   const bundle = mfs.readFileSync(bundlepath, 'utf-8')
-  const m = new Module()
-  m._compile(bundle, 'server-entry.js')
+
+  const m = getModuleFromString(bundle, 'server-entry.js')
   serverBundle = m.exports.default
   creatStoreMap = m.exports.creatStoreMap
 })
@@ -68,12 +82,17 @@ module.exports = function (app) {
           res.send()
           return
         }
+        const helmet = Helmet.rewind()
         const state = getStoreState(stores)
         const content = ReactDomServer.renderToString(app)
 
         const html = ejs.render(template, {
           appString: content,
-          initialState: serialize(state)
+          initialState: serialize(state),
+          meta: helmet.meta.toString(), // SEO标签优化
+          title: helmet.title.toString(),
+          link: helmet.link.toString(),
+          style: helmet.style.toString()
         })
         res.send(html)
         // res.send(template.replace('<!-- -->', content))
