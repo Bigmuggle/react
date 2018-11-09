@@ -9,7 +9,7 @@ module.exports = webpackConfig(baseConfig, {
   },
   externals: Object.keys(require('../package.json').dependencies),
   output: {
-    filename: 'server-entry1.js',
+    filename: 'server-entry.js',
     path: path.join(__dirname, '../dist'),
     publicPath: '/public', // 打包出的统一前缀
     libraryTarget: 'commonjs2' // 打包的模块方案

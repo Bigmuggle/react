@@ -3,12 +3,9 @@ const path = require('path')
 const webpack = require('webpack')
 const MemoryFs = require('memory-fs')
 const proxy = require('http-proxy-middleware')
-const ejs = require('ejs')
-const serialize = require('serialize-javascript')
-const asyncBootstrap = require('react-async-bootstrapper')
-const ReactDomServer = require('react-dom/server')
+
 const serverConfig = require('../../build/webpack.config.server')
-const Helmet = require('react-helmet').default
+const serverRender = require('./server.render')
 
 const getTemplate = () => {
   return new Promise((resolve, reject) => {
@@ -37,7 +34,7 @@ const mfs = new MemoryFs()
 const serverCompiler = webpack(serverConfig)
 
 serverCompiler.outputFileSystem = mfs
-let serverBundle, creatStoreMap
+let serverBundle
 serverCompiler.watch({}, (err, stats) => {
   if (err) throw err
   stats = stats.toJson()
@@ -54,49 +51,17 @@ serverCompiler.watch({}, (err, stats) => {
   const bundle = mfs.readFileSync(bundlepath, 'utf-8')
 
   const m = getModuleFromString(bundle, 'server-entry.js')
-  serverBundle = m.exports.default
-  creatStoreMap = m.exports.creatStoreMap
+  serverBundle = m.exports
 })
-
-const getStoreState = (stores) => {
-  return Object.keys(stores).reduce((result, storeName) => {
-    result[storeName] = stores[storeName].toJson()
-    return result
-  }, {})
-}
 
 module.exports = function (app) {
   app.use('/public', proxy({
     target: 'http://localhost:8888'
   }))
 
-  app.get('*', function (req, res) {
+  app.get('*', function (req, res, next) {
     getTemplate().then(template => {
-      const routerContext = {}
-      const stores = creatStoreMap()
-      const app = serverBundle(stores, routerContext, req.url)
-
-      asyncBootstrap(app).then(() => {
-        if (routerContext.url) {
-          res.status(302).setHeader('Location', routerContext.url)
-          res.send()
-          return
-        }
-        const helmet = Helmet.rewind()
-        const state = getStoreState(stores)
-        const content = ReactDomServer.renderToString(app)
-
-        const html = ejs.render(template, {
-          appString: content,
-          initialState: serialize(state),
-          meta: helmet.meta.toString(), // SEO标签优化
-          title: helmet.title.toString(),
-          link: helmet.link.toString(),
-          style: helmet.style.toString()
-        })
-        res.send(html)
-        // res.send(template.replace('<!-- -->', content))
-      })
-    })
+      serverRender(serverBundle, template, req, res)
+    }).catch(next)
   })
 }
