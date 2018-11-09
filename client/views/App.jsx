@@ -11,9 +11,9 @@ export default class App extends React.Component {
   render() {
     return [
       <div key="banner">
-        <Link to="/">首页</Link>
+        <Link to="/">首页1</Link>
         <br />
-        <Link to="/detail">详情页</Link>
+        <Link to="/detail">详情页2</Link>
       </div>,
       <Route key="navbar" />,
     ]
