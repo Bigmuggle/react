@@ -1,7 +1,4 @@
 {
     "git.ignoreLimitWarning": true,
-    "javascript.implicitProjectConfig.experimentalDecorators": true,
-    "search.exclude": {
-        "**/.jsx": true
-    }
+    "javascript.implicitProjectConfig.experimentalDecorators": true
 }

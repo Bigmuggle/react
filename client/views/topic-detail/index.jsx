@@ -1,13 +1,7 @@
 import React from 'react'
 
 export default class TopicDetail extends React.Component {
-  constructor() {
-    super()
-    this.componentWillMount = null
-    this.componentWillReceiveProps = null;
-  }
-
-  componentWillMount() {
+  componentDidMount() {
   // do something hear
   }
 

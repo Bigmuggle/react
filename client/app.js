@@ -9,12 +9,14 @@ import AppState from './store/app.state'
 import App from './views/App'
 
 const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   palette: {
     primary: lightBlue,
     accent: pink,
     type: 'light',
   },
-
 })
 
 const initialState = window.__INITIAL__STATE__ || {} // eslint-disable-line

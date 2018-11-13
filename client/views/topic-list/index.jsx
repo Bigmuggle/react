@@ -14,11 +14,9 @@ class TopicList extends React.Component {
   constructor() {
     super()
     this.changeName = this.changeName.bind(this)
+    this.componentDidMount = null
   }
 
-  componentDidMount() {
-    // do something hear
-  }
 
   asyncBootstrap() {
     return new Promise((resolve) => {

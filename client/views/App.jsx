@@ -4,12 +4,6 @@ import Route from '../config/router'
 
 
 export default class App extends React.Component {
-  constructor() {
-    super()
-    this.componentWillReceiveProps = null;
-    this.componentWillMount = null
-  }
-
   componentDidMount() {
     // 你好
   }
