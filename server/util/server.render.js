@@ -4,10 +4,12 @@ const asyncBootstrap = require('react-async-bootstrapper')
 const ReactDomServer = require('react-dom/server')
 const Helmet = require('react-helmet').default
 
-const SheetsRegistry = require('jss')
-const createGenerateClassName = require('@material-ui/core/styles/createGenerateClassName')
-const creatMuiTheme = require('@material-ui/core/styles/createMuiTheme')
-const colors = require('@material-ui/core/colors')
+const SheetsRegistry = require('react-jss').SheetsRegistry
+const create = require('jss').create
+const preset = require('jss-preset-default').default
+const createGenerateClassName = require('material-ui/styles/createGenerateClassName').default
+const createMuiTheme = require('material-ui/styles').createMuiTheme
+const colors = require('material-ui/colors')
 
 const getStoreState = (stores) => {
   return Object.keys(stores).reduce((result, storeName) => {
@@ -22,18 +24,17 @@ module.exports = (bundle, template, req, res) => {
     const routerContext = {}
     const stores = creatStoreMap()
     const sheetsRegistry = new SheetsRegistry()
-    const generateClassName = createGenerateClassName()
-    // Create a sheetsManager instance.
-    const sheetsManager = new Map()
-
-    const theme = creatMuiTheme({
+    const jss = create(preset())
+    jss.options.createGenerateClassName = createGenerateClassName
+    const theme = createMuiTheme({
       palette: {
-        primary: colors.pink,
-        accent: colors.lightBlue,
+        primary: colors.blue,
+        secondary: colors.pink,
         type: 'light'
       }
     })
-    const app = createApp(stores, routerContext, req.url, sheetsRegistry, generateClassName, sheetsManager, theme)
+    // const generateClassName = createGenerateClassName()
+    const app = createApp(stores, routerContext, sheetsRegistry, jss, theme, req.url)
 
     asyncBootstrap(app).then(() => {
       if (routerContext.url) {
@@ -49,10 +50,11 @@ module.exports = (bundle, template, req, res) => {
         appString: content,
         initialState: serialize(state),
         meta: helmet.meta.toString(), // SEO标签优化
+        materialCss: sheetsRegistry.toString(),
         title: helmet.title.toString(),
         link: helmet.link.toString(),
-        style: helmet.style.toString(),
-        materialCss: SheetsRegistry.toString()
+        style: helmet.style.toString()
+
       })
       res.send(html)
       // res.send(template.replace('<!-- -->', content))
