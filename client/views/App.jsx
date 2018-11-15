@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import Route from '../config/router'
 
+import AppBar from './layout/app.bar'
 
 export default class App extends React.Component {
   componentDidMount() {
@@ -10,11 +10,8 @@ export default class App extends React.Component {
 
   render() {
     return [
-      <div key="banner">
-        <Link to="/">首页1</Link>
-        <br />
-        <Link to="/detail">详情页2</Link>
-      </div>,
+      <AppBar key="Appbar" />,
+
       <Route key="navbar" />,
     ]
   }
