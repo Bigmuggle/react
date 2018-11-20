@@ -2,55 +2,63 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 // import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import { ListItemAvatar } from 'material-ui';
+import { ListItem, ListItemText } from 'material-ui';
+// import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from 'material-ui/Avatar';
+import ListItemAvatar from 'material-ui/List/ListItemAvatar';
 
+import { topicPrimaryStyle, topicSecondartStyles } from './styles'
 
 const styles = {
   root: {
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: '#555',
+    display: 'flex',
   },
-};
-const primary = ({ topic }) => (
-  <div>
-    <span>{topic.tab}</span>
-    <span>{topic.title}</span>
+}
+const Primary = ({ classes, topic }) => (
+  <div className={classes.root}>
+    <span className={classes.tab}>{topic.tab}</span>
+    <span className={classes.title}>{topic.title}</span>
   </div>
 )
 
-const Seconday = ({ topic }) => (
-  <div>
-    <span>{topic.username}</span>
+const Seconday = ({ classes, topic }) => (
+  <div className={classes.root}>
+    <span className={classes.username}>{topic.username}</span>
     <span>
-      <span>{topic.reply_count}</span>
+      <span className={classes.reply_count} title="回复数">{topic.reply_count}</span>
       <span>/</span>
-      <span>{topic.cisit_count}</span>
+      <span className={classes.count} title="浏览数">{topic.cisit_count}</span>
+    </span>
+    <span className={classes.creat_at} title="创建时间">
+         创建时间：
+      {topic.creat_at}
     </span>
   </div>
 )
+const StyledPrimary = withStyles(topicPrimaryStyle)(Primary)
+const StyledSeconday = withStyles(topicSecondartStyles)(Seconday)
+function TopicListItem({ onClick, topic }) {
+  return (
+    <ListItem button onClick={onClick}>
+      <ListItemAvatar>
+        <Avatar src={topic.image} />
+      </ListItemAvatar>
+      <ListItemText>
+        <StyledPrimary topic={topic} />
+        <StyledSeconday topic={topic} />
+      </ListItemText>
+    </ListItem>
+  )
+}
 
-const TopicListItem= ({ onClick, topic }) => (
-  <ListItem button onClick={onClick}>
-    <ListItemAvatar>
-      <Avatar src={topic.image} />
-    </ListItemAvatar>
-    <ListItemText
-      primary={<primary topic={topic} />}
-      seconday={<Seconday topic={topic} />}
-    />
-  </ListItem>
-)
 
-
-primary.propTypes = {
+Primary.propTypes = {
+  classes: PropTypes.object.isRequired,
   topic: PropTypes.object.isRequired,
 };
 
 Seconday.propTypes = {
+  classes: PropTypes.object.isRequired,
   topic: PropTypes.object.isRequired,
 };
 TopicListItem.propTypes = {

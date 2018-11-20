@@ -6,12 +6,12 @@ import {
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 
-import Tabs from '@material-ui/core/Tabs'
-import { Tab } from '@material-ui/core'
+import Tabs from 'material-ui/Tabs'
+import { Tab } from 'material-ui'
 // import Button from 'material-ui/Button'
 import AppState from '../../store/app.state';
 import Container from '../layout/container';
-// import ListItem from './list-item'
+import ListItem from './list-item'
 
 @inject('appState') @observer
 
@@ -42,14 +42,20 @@ class TopicList extends React.Component {
   }
 /*eslint-disable*/
   ListItemClick() {
-ALERT
+    alert(1)
   }
 
   /* eslint-enable */
   render() {
-    // const topic={
-
-    // }
+    const topic={
+      title: 'this is title',
+      username: '大卫',
+      image: 'http://img5.imgtn.bdimg.com/it/u=1956880878,2919163905&fm=200&gp=0.jpg',
+      reply_count: '23',
+      cisit_count: '333',
+      creat_at: '2018.10.12',
+      tab: '置顶',
+    }
     return (
       <Container>
         <Helmet>
@@ -64,7 +70,7 @@ ALERT
           <Tab label="招聘" />
           <Tab label="测试" />
         </Tabs>
-        {/* <ListItem onClick={this.ListItemClick} topic={topic} /> */}
+        <ListItem onClick={this.ListItemClick} topic={topic} />
       </Container>
     )
   }
