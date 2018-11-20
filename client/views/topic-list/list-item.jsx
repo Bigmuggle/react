@@ -8,13 +8,13 @@ import Avatar from '@material-ui/core/Avatar';
 import { ListItemAvatar } from 'material-ui';
 
 
-const styles = theme => ({
+const styles = {
   root: {
     width: '100%',
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#555',
   },
-});
+};
 const primary = ({ topic }) => (
   <div>
     <span>{topic.tab}</span>
