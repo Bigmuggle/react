@@ -22,18 +22,18 @@ const Primary = ({ classes, topic }) => (
 )
 
 const Seconday = ({ classes, topic }) => (
-  <div className={classes.root}>
-    <span className={classes.username}>{topic.username}</span>
+  <span className={classes.root}>
+    <span className={classes.username}>{topic.author.loginname}</span>
     <span>
       <span className={classes.reply_count} title="回复数">{topic.reply_count}</span>
       <span>/</span>
-      <span className={classes.count} title="浏览数">{topic.cisit_count}</span>
+      <span className={classes.count} title="浏览数">{topic.visit_count}</span>
     </span>
     <span className={classes.creat_at} title="创建时间">
          创建时间：
-      {topic.creat_at}
+      {topic.create_at}
     </span>
-  </div>
+  </span>
 )
 const StyledPrimary = withStyles(topicPrimaryStyle)(Primary)
 const StyledSeconday = withStyles(topicSecondartStyles)(Seconday)
@@ -41,7 +41,7 @@ function TopicListItem({ onClick, topic }) {
   return (
     <ListItem button onClick={onClick}>
       <ListItemAvatar>
-        <Avatar src={topic.image} />
+        <Avatar src={topic.author.avatar_url} />
       </ListItemAvatar>
       <ListItemText>
         <StyledPrimary topic={topic} />
