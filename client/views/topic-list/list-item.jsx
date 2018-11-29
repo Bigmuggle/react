@@ -1,25 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-// import List from '@material-ui/core/List';
+import cx from 'classnames';
 import { ListItem, ListItemText } from 'material-ui';
 // import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from 'material-ui/Avatar';
 import ListItemAvatar from 'material-ui/List/ListItemAvatar';
 
 import { topicPrimaryStyle, topicSecondartStyles } from './styles'
+import { tabs } from '../../util/variable-define'
 
 const styles = {
   root: {
     display: 'flex',
   },
 }
-const Primary = ({ classes, topic }) => (
-  <div className={classes.root}>
-    <span className={classes.tab}>{topic.tab}</span>
-    <span className={classes.title}>{topic.title}</span>
-  </div>
-)
+const Primary = ({ classes, topic }) => {
+  const classNames = cx({
+    [classes.tab]: true,
+    [classes.top]: topic.top,
+  })
+  return (
+    <span className={classes.root}>
+      <span className={classNames}>{topic.top ? '置顶' : tabs[topic.tab]}</span>
+      <span className={classes.title}>{topic.title}</span>
+    </span>
+  )
+}
 
 const Seconday = ({ classes, topic }) => (
   <span className={classes.root}>
@@ -44,8 +51,10 @@ function TopicListItem({ onClick, topic }) {
         <Avatar src={topic.author.avatar_url} />
       </ListItemAvatar>
       <ListItemText>
-        <StyledPrimary topic={topic} />
-        <StyledSeconday topic={topic} />
+        <div>
+          <StyledPrimary topic={topic} />
+          <StyledSeconday topic={topic} />
+        </div>
       </ListItemText>
     </ListItem>
   )
@@ -62,7 +71,7 @@ Seconday.propTypes = {
   topic: PropTypes.object.isRequired,
 };
 TopicListItem.propTypes = {
-  onClick: PropTypes.object.isRequired,
+  onClick: PropTypes.object,
   topic: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(TopicListItem)

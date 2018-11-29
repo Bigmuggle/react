@@ -33,26 +33,25 @@ export default class TopicStore {
     this.topics.push(new Topic(createTopic(topic)))
   }
 
-  @action fetchTopic() {
+  @action fetchTopic(tab) {
     return new Promise((resolve, reject) => {
       this.syncing = true
       get('/topics', {
         mdrender: false,
+        tab,
       }).then((resp) => {
         if (resp.success) {
-          resp.data.forEach((topic) => {
-            this.addTopic(topic)
-          })
-
-          resolve()
+          this.topics = resp.data.map(topic => new Topic(createTopic(topic)));
+          resolve();
         } else {
-          reject()
-          this.syncing = false
+          reject();
         }
+        this.syncing = false;
       }).catch((err) => {
-        reject(err)
-        this.syncing = false
-      })
-    })
+        console.log(err);//eslint-disable-line
+        reject(err);
+        this.syncing = false;
+      });
+    });
   }
 }

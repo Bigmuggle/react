@@ -5,34 +5,50 @@ import {
 } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-
-import Tabs from 'material-ui/Tabs'
-import { Tab } from 'material-ui'
+import Tabs, { Tab } from 'material-ui/Tabs'
+import queryString from 'query-string'
 // import Button from 'material-ui/Button'
 import { CircularProgress } from 'material-ui/Progress';
 import List from 'material-ui/List'
-import AppState from '../../store/app.state';
 import Container from '../layout/container';
 import ListItem from './list-item'
-import { TopicStore } from '../../store/store';
+// import { TopicStore, AppState } from '../../store/store';
+import { tabs } from '../../util/variable-define'
 
 @inject(stores => ({
   appState: stores.appState,
   topicStore: stores.topicStore,
 })) @observer
 
-class TopicList extends React.Component {
+export default class TopicList extends React.Component {
+  static contextTypes = {
+    router: PropTypes.object,
+  }
+
+
   constructor() {
     super()
     this.TabsonChange = this.TabsonChange.bind(this)
     this.ListItemClick = this.ListItemClick.bind(this)
-    this.state = {
-      tabsIndex: 0,
-    }
   }
 
   componentDidMount() {
-    this.props.topicStore.fetchTopic()
+    const tab = this.getTab()
+    this.props.topicStore.fetchTopic(tab)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.search !== this.props.location.search) {
+      // eslint-disable-next-line no-alert
+      this.props.topicStore.fetchTopic(this.getTab(nextProps.location.search))
+    }
+  }
+
+  getTab(search) {
+    // eslint-disable-next-line no-param-reassign
+    search = search || this.props.location.search;
+    const query = queryString.parse(search)
+    return query.tab || 'all'
   }
 
   asyncBootstrap() {
@@ -44,58 +60,58 @@ class TopicList extends React.Component {
     })
   }
 
-  TabsonChange(e, index) {
-    this.setState({
-      tabsIndex: index,
+  TabsonChange(e, value) {
+    this.context.router.history.push({
+      pathname: '/list',
+      search: '?tab='+value,
     })
   }
-/*eslint-disable*/
+
   ListItemClick() {
-    alert(1)
+
   }
 
-  /* eslint-enable */
   render() {
     const {
       topicStore,
     } = this.props
     const syningTopic = topicStore.syncing
+    // eslint-disable-next-line no-alert
     const topicList = topicStore.topics
+    const tab = this.getTab()
     return (
       <Container>
         <Helmet>
           <title>this is list</title>
           <meta name="description" content="this is description" />
         </Helmet>
-        <Tabs value={this.state.tabsIndex} onChange={this.TabsonChange}>
-          <Tab label="全部" />
-          <Tab label="精华" />
-          <Tab label="分享" />
-          <Tab label="问答" />
-          <Tab label="招聘" />
-          <Tab label="测试" />
+        <Tabs value={tab} onChange={this.TabsonChange}>
+          {
+          Object.keys(tabs).map(t => <Tab value={t} key={tabs[t]} label={tabs[t]} />)
+          }
         </Tabs>
         <List>
           {
           topicList.map(topic => <ListItem onClick={this.ListItemClick} key={topic.id} topic={topic} />)
         }
+
         </List>
         {
-          syningTopic
-            ?(
-              <div>
-                <CircularProgress color="primary" size={60} />
-              </div>
-            )
-            :null
+          syningTopic ? (
+            <div style={{ display: 'flex', justifyContent: 'space-around', padding: '40px 0' }}>
+              <CircularProgress color="secondary" size={100} />
+            </div>
+          ):null
         }
       </Container>
     )
   }
 }
 
+TopicList.wrappedComponent.propTypes = {
+  appState: PropTypes.object.isRequired,
+  topicStore: PropTypes.object.isRequired,
+};
 TopicList.propTypes = {
-  appState: PropTypes.instanceOf(AppState).isRequired,
-  topicStore: PropTypes.instanceOf(TopicStore).isRequired,
-}
-export default TopicList
+  location: PropTypes.object.isRequired,
+};
