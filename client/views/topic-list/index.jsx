@@ -8,7 +8,8 @@ import Helmet from 'react-helmet'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import queryString from 'query-string'
 // import Button from 'material-ui/Button'
-import { CircularProgress } from 'material-ui/Progress';
+import { CircularProgress } from 'material-ui';
+
 import List from 'material-ui/List'
 import Container from '../layout/container';
 import ListItem from './list-item'
@@ -90,19 +91,16 @@ export default class TopicList extends React.Component {
           Object.keys(tabs).map(t => <Tab value={t} key={tabs[t]} label={tabs[t]} />)
           }
         </Tabs>
+
         <List>
           {
-          topicList.map(topic => <ListItem onClick={this.ListItemClick} key={topic.id} topic={topic} />)
-        }
-
-        </List>
-        {
           syningTopic ? (
             <div style={{ display: 'flex', justifyContent: 'space-around', padding: '40px 0' }}>
               <CircularProgress color="secondary" size={100} />
             </div>
-          ):null
+          ): topicList.map(topic => <ListItem onClick={this.ListItemClick} key={topic.id} topic={topic} />)
         }
+        </List>
       </Container>
     )
   }
