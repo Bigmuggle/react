@@ -4,6 +4,7 @@ import {
   // computed,
   // toJS,
   extendObservable,
+  computed,
 } from 'mobx'
 import { get } from '../util/http'
 import topicSharme from '../util/variable-define'
@@ -21,16 +22,27 @@ class Topic {
 export default class TopicStore {
   @observable topics
 
+  @observable details
+
   @observable syncing
 
-  constructor({ syncing, topics } = { syncing: false, topics: [] }) {
+  constructor({ syncing = false, topics = [], details = [] } = {}) {
     // eslint-disable-next-line no-sequences
     this.syncing = syncing,
     this.topics = topics.map(topic => new Topic(createTopic(topic)))
+    this.details = details.map(topic => new Topic(createTopic(topic)))
   }
 
   addTopic(topic) {
     this.topics.push(new Topic(createTopic(topic)))
+  }
+
+  @computed get detailMap() {
+    return this.details.reduce((result, detail) => {
+      // eslint-disable-next-line no-param-reassign
+      result[detail.id] = detail
+      return result
+    }, {})
   }
 
   @action fetchTopic(tab) {
@@ -53,5 +65,28 @@ export default class TopicStore {
         this.syncing = false;
       });
     });
+  }
+
+  @action getTopicDetail(id) {
+    return new Promise((resolve, reject) => {
+      if (this.detailMap[id]) {
+        resolve(this.detailMap[id])
+      } else {
+        get('/topic/'+id, {
+          mdrender: false,
+        })
+          .then((resp) => {
+            if (resp.success) {
+              const topic = new Topic(createTopic(resp.data))
+              this.details.push(topic)
+              resolve(topic)
+            } else {
+              reject()
+            }
+          }).catch((err) => {
+            reject(err)
+          })
+      }
+    })
   }
 }

@@ -68,8 +68,8 @@ export default class TopicList extends React.Component {
     })
   }
 
-  ListItemClick() {
-
+  ListItemClick(topic) {
+    this.context.router.history.push('/detail/'+topic.id)
   }
 
   render() {
@@ -94,13 +94,16 @@ export default class TopicList extends React.Component {
 
         <List>
           {
+             topicList.map(topic => <ListItem onClick={() => { this.ListItemClick(topic) }} key={topic.id} topic={topic} />)
+          }
+        </List>
+        {
           syningTopic ? (
             <div style={{ display: 'flex', justifyContent: 'space-around', padding: '40px 0' }}>
               <CircularProgress color="secondary" size={100} />
             </div>
-          ): topicList.map(topic => <ListItem onClick={this.ListItemClick} key={topic.id} topic={topic} />)
-        }
-        </List>
+          ) : null
+         }
       </Container>
     )
   }

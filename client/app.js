@@ -3,15 +3,15 @@ import ReactDom from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { AppContainer } from 'react-hot-loader' //eslint-disable-line
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
-import { lightBlue, pink } from 'material-ui/colors'
+import { blueGrey, grey } from 'material-ui/colors'
 import { Provider } from 'mobx-react'
 import { AppState, TopicStore } from './store/store'
 import App from './views/App'
 
 const theme = createMuiTheme({
   palette: {
-    primary: pink,
-    secondary: lightBlue,
+    primary: grey,
+    secondary: blueGrey,
     type: 'light',
   },
 });
