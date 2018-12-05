@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -8,9 +9,11 @@ import Helmet from 'react-helmet'
 import Marked from 'marked'
 import { withStyles } from 'material-ui'
 import { CircularProgress } from 'material-ui/Progress'
+import Paper from 'material-ui/Paper'
 import Container from '../layout/container'
 import { TopicStore } from '../../store/store';
 import { topicDetailcontent } from './style'
+import Reply from './message'
 
 @inject(stores => ({
   topicStore: stores.topicStore,
@@ -39,19 +42,39 @@ class TopicDetail extends React.Component {
       );
     }
     return (
-      <Container>
-        <Helmet>
-          <title>this is detail</title>
-          <meta name="description" content="this is description" />
-        </Helmet>
-        <header className={classes.header}>
-          {topic.title}
-        </header>
-        <section className={classes.content}>
-          <p dangerouslySetInnerHTML={{ __html: Marked(topic.content) }} />
-        </section>
+      <div>
+        <Container>
+          <Helmet>
+            <title>this is detail</title>
+            <meta name="description" content="this is description" />
+          </Helmet>
+          <header className={classes.header}>
+            {topic.title}
+          </header>
+          <section className={classes.content}>
+            <p dangerouslySetInnerHTML={{ __html: Marked(topic.content) }} />
+          </section>
+        </Container>
+        <Paper elevation={4} className={classes.paper}>
+          <header className={classes.answer}>
+            <span>
+              {topic.reply_count}
+                回复
+            </span>
+            <span className={classes.number}>
+               最新回复
+              {topic.last_reply_at}
+            </span>
+          </header>
+          {/* <Reply /> */}
+          {
 
-      </Container>
+            topic.replies.map(reply => <Reply reply={reply} key={reply.id} />)
+          }
+        </Paper>
+
+      </div>
+
     )
   }
 }
