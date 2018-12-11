@@ -2,6 +2,7 @@
 import axios from 'axios'
 
 const baseUrl = process.env.API_BASE || ''
+console.log(baseUrl)
 const parseUrl = (url, params) => {
   const str = Object.keys(params).reduce((result, key) => {
     // eslint-disable-next-line no-param-reassign
@@ -24,9 +25,8 @@ export const get = (url, params) => new Promise((resolve, reject) => {
     }).catch(reject)
 })
 export const post = (url, params, data) => new Promise((resolve, reject) => {
-  axios.post(baseUrl(url, params), data)
+  axios.post(parseUrl(url, params), data)
     .then((resp) => {
-      // eslint-disable-next-line prefer-destructuring
       // eslint-disable-next-line no-shadow
       const data = resp.data
       if (data && data.success ===true) {

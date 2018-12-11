@@ -92,17 +92,19 @@ export default class TopicList extends React.Component {
           }
         </Tabs>
 
-        <List>
-          {
-             topicList.map(topic => <ListItem onClick={() => { this.ListItemClick(topic) }} key={topic.id} topic={topic} />)
-          }
-        </List>
+
         {
           syningTopic ? (
             <div style={{ display: 'flex', justifyContent: 'space-around', padding: '40px 0' }}>
               <CircularProgress color="secondary" size={100} />
             </div>
-          ) : null
+          ) : (
+            <List>
+              {
+             topicList.map(topic => <ListItem onClick={() => { this.ListItemClick(topic) }} key={topic.id} topic={topic} />)
+              }
+            </List>
+          )
          }
       </Container>
     )

@@ -1,32 +1,21 @@
-import avatar from './login.jpg'
-
-export default () => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+export default theme => ({
+  box: {
+    minHeight: 400,
+  },
+  root: {
+    width: '300px',
+    height: '200px',
+    margin: 'auto',
   },
   textField: {
+    marginLeft: 50,
+    marginRight: 50,
     width: 200,
   },
-  menu: {
+  button: {
+    margin: '5px 50px',
     width: 200,
+    color: '#ccc',
+    backgroundColor: theme.palette.primary[600],
   },
-  box: {
-    backgroundImage: 'url('+avatar+')',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: '100% 100%',
-    width: '100%',
-    height: '900px',
-    overflow: 'hidden',
-    position: 'fixed',
-    top: '0',
-    left: '0',
-  },
-  boxlogin: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '400px',
-    height: '500px',
-  },
-});
+})

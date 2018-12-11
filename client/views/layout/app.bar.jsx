@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-
+import {
+  inject,
+  observer,
+} from 'mobx-react'
 
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -18,8 +21,15 @@ const styles = {
     flex: 1,
   },
 }
+@inject(stores => ({
+  appState: stores.appState,
+  user: stores.appState.user,
+})) @observer
 /* eslint-disable */
 class MenuAppBar extends React.Component {
+  static contextTypes = {
+    router:PropTypes.object
+  }
   constructor() {
     super()
     this.onHomeButtonClick = this.onHomeButtonClick.bind(this)
@@ -28,7 +38,7 @@ class MenuAppBar extends React.Component {
   }
 
   onHomeButtonClick() {
-
+    this.context.router.history.replace('/list')
   }
 
   createButtonClick() {
@@ -36,11 +46,16 @@ class MenuAppBar extends React.Component {
   }
 
   loginButtonClick() {
-
+    if(!this.props.user.isLogin){
+      this.context.router.history.replace('/user/login')
+    }
   }
 
   render(_props) {
-    const { classes } = this.props;
+    const {
+      classes ,
+      user,
+    } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="fixed">
@@ -55,7 +70,9 @@ class MenuAppBar extends React.Component {
               新建话题
             </Button>
             <Button color="secondary"  onClick={this.loginButtonClick}>
-              登陆
+              {
+                user.isLogin? user.info.loginname: '登录'
+              }
             </Button>
           </Toolbar>
         </AppBar>
@@ -66,5 +83,6 @@ class MenuAppBar extends React.Component {
 /* eslint-enable */
 MenuAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(MenuAppBar);
