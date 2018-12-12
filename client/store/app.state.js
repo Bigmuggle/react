@@ -20,6 +20,7 @@ export default class AppState {
         if (resp.success) {
           this.user.isLogin = true
           this.user.info= resp.data
+          console.log(this.user.info)
           resolve()
         } else {
           reject()

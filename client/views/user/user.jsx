@@ -34,12 +34,13 @@ class UserLogin extends React.Component {
       user,
     } = this.props;
     // const avaterUrl = ''
+    console.log(user.avatar_url)
     return (
       <Container elevation={4} className={classes.root}>
         <div className={classes.box}>
           {
               user.isLogin? (
-                <Avatar className={classes.avatar} src={user.avatar_url} />
+                <Avatar className={classes.avatar} src={user.info.avatar_url} />
               )
                 : (
                   <Avatar className={classes.avatar}>
@@ -47,7 +48,7 @@ class UserLogin extends React.Component {
                   </Avatar>
                 )
             }
-
+          <span className={classes.loginname}>{user.info.loginname}</span>
         </div>
         {this.props.children}
       </Container>

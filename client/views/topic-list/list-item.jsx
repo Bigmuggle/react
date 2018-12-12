@@ -46,7 +46,7 @@ const StyledPrimary = withStyles(topicPrimaryStyle)(Primary)
 const StyledSeconday = withStyles(topicSecondartStyles)(Seconday)
 function TopicListItem({ onClick, topic }) {
   return (
-    <ListItem button onClick={onClick}>
+    <ListItem onClick={onClick}>
       <ListItemAvatar>
         <Avatar src={topic.author.avatar_url} />
       </ListItemAvatar>

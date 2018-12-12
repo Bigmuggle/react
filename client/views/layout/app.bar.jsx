@@ -22,7 +22,6 @@ const styles = {
   },
 }
 @inject(stores => ({
-  appState: stores.appState,
   user: stores.appState.user,
 })) @observer
 /* eslint-disable */
@@ -51,7 +50,7 @@ class MenuAppBar extends React.Component {
     }
   }
 
-  render(_props) {
+  render() {
     const {
       classes ,
       user,
@@ -83,6 +82,8 @@ class MenuAppBar extends React.Component {
 /* eslint-enable */
 MenuAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
+};
+MenuAppBar.wrappedComponent.propTypes = {
   user: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(MenuAppBar);

@@ -38,4 +38,10 @@ export default () => ({
     width: '110px',
     height: '110px',
   },
+  loginname: {
+    position: 'absolute',
+    top: '340px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+  },
 });

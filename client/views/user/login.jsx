@@ -53,7 +53,6 @@ class FormLogin extends React.Component {
 
     return this.props.appState.login(this.state.accessToken)
       .then(() => {
-        console.log(1)
         this.context.router.history.replace('/user/info')
       }).catch((err) => {
         console.log(err)

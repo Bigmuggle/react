@@ -7,6 +7,9 @@ export const topicDetailcontent = theme => ({
   content: {
     padding: '0 10px',
     borderRadius: 5,
+    '& img': {
+      maxWidth: '100%',
+    },
   },
   paper: {
     margin: 24,
@@ -26,6 +29,7 @@ export const ReplyStyle = theme => ({
     padding: '5px 10px',
     minHeight: '150px',
     borderBottom: '1px solid #ccc',
+
   },
 
   left: {

@@ -1,9 +1,10 @@
 import React from 'react'
+import UserWrapper from './user'
 
 class LoginInfo extends React.Component {
   render() {
     return (
-      <div>123</div>
+      <UserWrapper><div>1`2</div></UserWrapper>
     )
   }
 }
