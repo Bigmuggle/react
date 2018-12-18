@@ -91,9 +91,6 @@ export default class TopicList extends React.Component {
           Object.keys(tabs).map(t => <Tab value={t} key={tabs[t]} label={tabs[t]} />)
           }
         </Tabs>
-        {
-
-         }
         <List>
           {
             syningTopic ? (
