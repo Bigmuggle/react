@@ -48,7 +48,14 @@ class UserLogin extends React.Component {
                   </Avatar>
                 )
             }
-          <span className={classes.loginname}>{user.info.loginname}</span>
+user.info.loginname
+          <span className={classes.loginname}>
+            {
+            user.isLogin
+              ?user.info.loginname
+              : '未登录'
+          }
+          </span>
         </div>
         {this.props.children}
       </Container>

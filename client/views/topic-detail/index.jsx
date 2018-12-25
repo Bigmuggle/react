@@ -31,7 +31,6 @@ class TopicDetail extends React.Component {
     const { id } = this.props.match.params
 
     const topic = this.props.topicStore.detailMap[id]
-    console.log(topic)
     if (!topic) {
       return (
         <Container>

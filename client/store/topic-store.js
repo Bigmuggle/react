@@ -60,7 +60,6 @@ export default class TopicStore {
         }
         this.syncing = false;
       }).catch((err) => {
-        console.log(err);//eslint-disable-line
         reject(err);
         this.syncing = false;
       });

@@ -4,12 +4,21 @@ import
   action,
 }
   from 'mobx'
-import { post } from '../util/http'
+import { post, get } from '../util/http'
 
 export default class AppState {
   @observable user= {
     isLogin: false,
     info: {},
+    detail: {
+      recentTopics: [],
+      recentReplies: [],
+      syncing: false,
+    },
+    collections: {
+      syncing: false,
+      List: [],
+    },
   }
 
   @action login(accessToken) {
@@ -20,12 +29,50 @@ export default class AppState {
         if (resp.success) {
           this.user.isLogin = true
           this.user.info= resp.data
-          console.log(this.user.info)
           resolve()
         } else {
           reject()
         }
       }).catch(reject)
+    })
+  }
+
+  @action getUserDetail() {
+    this.user.detail.syncing = true
+    return new Promise((resolve, reject) => {
+      get('/user/'+this.user.info.loginname, {})
+        .then((resp) => {
+          if (resp.success) {
+            this.user.detail.recentReplies = resp.data.recent_replies
+            this.user.detail.recentTopics = resp.data.recent_topics
+            resolve
+          } else {
+            reject()
+          }
+          this.user.detail.syncing = false
+        }).catch((err) => {
+          this.user.detail.syncing = false
+          reject(err)
+        })
+    })
+  }
+
+  @action getUserCollect() {
+    this.user.collections.syning = true
+    return new Promise((resolve, reject) => {
+      get('/topic_collect/'+this.user.info.loginname, {})
+        .then((resp) => {
+          if (resp.success) {
+            this.user.collections.List = resp.data
+            resolve
+          } else {
+            reject()
+          }
+          this.user.collections.syncing = false
+        }).catch((err) => {
+          this.user.collections.syncing = false
+          reject(err)
+        })
     })
   }
 }
