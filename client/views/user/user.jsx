@@ -48,7 +48,6 @@ class UserLogin extends React.Component {
                   </Avatar>
                 )
             }
-user.info.loginname
           <span className={classes.loginname}>
             {
             user.isLogin

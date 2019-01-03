@@ -71,7 +71,7 @@ Seconday.propTypes = {
   topic: PropTypes.object.isRequired,
 };
 TopicListItem.propTypes = {
-  onClick: PropTypes.object,
+  onClick: PropTypes.func,
   topic: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(TopicListItem)

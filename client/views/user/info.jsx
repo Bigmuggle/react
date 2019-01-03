@@ -195,7 +195,7 @@ LoginInfo.wrappedComponent.propTypes = {
   user: PropTypes.object.isRequired,
 }
 ListItems.propTypes = {
-  onClick: PropTypes.object,
+  onClick: PropTypes.func,
   topic: PropTypes.object.isRequired,
 };
 export default withStyles(infoStyle)(LoginInfo)

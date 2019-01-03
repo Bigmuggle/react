@@ -7,25 +7,25 @@ router.post('/login', function (req, res, next) {
   axios.post(`${baseUrl}/accesstoken`, {
     accesstoken: req.body.accessToken
   })
-    .then(resp => {
+    .then((resp) => {
       if (resp.status === 200 && resp.data.success) {
         req.session.user = {
           accessToken: req.body.accessToken,
-          loginName: resp.data.loginname,
+          loginname: resp.data.loginname,
           id: resp.data.id,
-          avatarUrl: resp.data.avatar_url
+          avatar_url: resp.data.avatar_url
         }
         res.json({
           success: true,
           data: resp.data
         })
       }
-    })
-    .catch(err => {
+    }).catch(err => {
       if (err.response) {
         res.json({
           success: false,
-          data: err.response
+          // 坑之一，因为err.response是个嵌套很深层的对象所以在json这个方法里面没法被stringify
+          data: err.response.data
         })
       } else {
         next(err)
