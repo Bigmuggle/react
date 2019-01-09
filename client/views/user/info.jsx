@@ -64,6 +64,9 @@ class LoginInfo extends React.Component {
     const topics = this.props.appState.user.detail.recentTopics
     const replies = this.props.appState.user.detail.recentReplies
     const list = this.props.appState.user.collections.List
+    console.log(replies)
+    console.log(topics)
+    console.log(list)
     return (
       <UserWrapper className={classes.Paper}>
         <Grid container spacing={16} align="stretch">
@@ -87,9 +90,9 @@ class LoginInfo extends React.Component {
                     <div>
                       {
                         topics.length > 0
-                          ?replies.map(topic => (
+                          ?topics.map(topic => (
                             <ListItems
-                              topic={topics}
+                              topic={topic}
                               key={topic.id}
                               onClick={() => { this.goToTopic(topic.id) }}
                             />
@@ -162,7 +165,7 @@ class LoginInfo extends React.Component {
                     <div>
                       {
                         list.length > 0
-                          ? replies.map(topic => (
+                          ? list.map(topic => (
                             <ListItems
                               topic={topic}
                               key={topic.id}

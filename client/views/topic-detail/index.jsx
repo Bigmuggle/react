@@ -96,6 +96,33 @@ class TopicDetail extends React.Component {
             <p dangerouslySetInnerHTML={{ __html: Marked(topic.content) }} />
           </section>
         </Container>
+        {
+          topic.createdReplies && topic.createdReplies.length>0
+            ? (
+              <Paper elevation={4} className={classes.paper}>
+                <header className={classes.answer}>
+                  <span>最新回复</span>
+                  <span>
+                    {topic.createdReplies.length+'条'}
+                  </span>
+                </header>
+                {
+                  topic.createdReplies.map(reply => (
+                    <Reply
+                      key={reply.id}
+                      reply={Object.assign({}, reply, {
+                        author: {
+                          avatar_url: user.info.avatar_url,
+                          loginname: user.info.loginname,
+                        },
+                      })}
+                    />
+                  ))
+                }
+              </Paper>
+
+            ):null
+        }
         <Paper elevation={4} className={classes.paper}>
           <header className={classes.answer}>
             <span>
